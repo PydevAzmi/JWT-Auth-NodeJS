@@ -1,6 +1,7 @@
 const http = require('http');
 const dotenv = require('dotenv');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 require('./src/config/dbConnect').connect();
 const authRoutes = require('./src/routes/auth');
 
@@ -11,12 +12,23 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("./src/Public"));
+app.use(cookieParser())
 
 // View engine
 app.set('view engine', 'ejs');
 
 // routes
 app.use(authRoutes);
+
+app.get('/set-cookie', (req, res) => {
+    res.cookie('name', 'pydevazmi', { maxAge: 5000, httpOnly: false });
+    res.send('Cookie has been set');
+});
+
+app.get('/get-cookie', (req, res) => {
+    const cookie = req.cookies.name;
+    res.send(`Cookie value: ${cookie}`);
+});
 
 // Server
 const server = http.createServer(app);

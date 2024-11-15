@@ -1,7 +1,13 @@
 # Dockerfile for Express API server
 FROM node:alpine
 WORKDIR /src
-COPY package.json /src
-RUN npm install
+RUN apk --no-cache add \
+		bash \
+		ca-certificates
+
+# Install dependencies
+COPY package*.json /src
 COPY . /src
-CMD ["node", "index.js"]
+RUN npm install 
+
+CMD [ "npm", "run", "dev" ]
