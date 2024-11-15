@@ -60,7 +60,6 @@ module.exports.login_post = async (req, res)=>{
 
 }
 
-
 module.exports.list_users = async (req, res)=>{
     const users = await User.find({});
     res.status(200).json(users);
@@ -75,6 +74,11 @@ module.exports.del_user = async (req, res)=>{
 
 module.exports.get_current_user = async (req, res)=>{
     const token = req.cookies.jwt;
-
-    res.send(token)
+    if (!token){
+        res.status(400).json({errors:"No token found"});
+        return;
+    }
+    const decoded_data = jwt.decode(token);
+    const user = await User.findById(decoded_data.id);
+    res.status(200).json(user);
 }
