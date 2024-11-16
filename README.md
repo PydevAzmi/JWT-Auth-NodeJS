@@ -38,25 +38,26 @@ This is a Node.js application that manages user authentication using JWT (JSON W
     ```bash
     touch .env
     ```
-  Write the following in the .env file:
+    Write the following in the .env file:
+    ```
     MONGODB_USER=your-username
     MONGODB_PASSWORD=your-password
     MONGODB_DATABASE=your-database
     MONGODB_DOCKER_PORT=27017
     NODE_PORT=5000
     JWT_SECRET=your-jwt-secret
-
-3. build the Docker image:
+   ```
+4. build the Docker image:
    ```bash
    docker-compose build
    ```
 
-4. run the Docker containers:
+5. run the Docker containers:
    ```bash
    docker-compose up
    ```
 
-5. install the bcrypt because it depends on the OS:
+6. install the bcrypt because it depends on the OS:
    ```bash
    docker exec -it dockeronnode-node-app-1 /bin/bash
    #/ npm install bcrypt
@@ -66,11 +67,3 @@ This is a Node.js application that manages user authentication using JWT (JSON W
 ## API Documentation
    this is the API documentation for the JWT-Auth-NodeJS application published on Postman:
    https://documenter.getpostman.com/view/23311056/2sAYBPmZku
-
-
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for enhancements or bug fixes.
-
-
-## License
-This project is licensed under the MIT License.
