@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken')
 
 const maxAge = 60 * 60 * 24;
 const createToken = (id) =>{
-    return jwt.sign({id}, "nodeondocker", {
+    return jwt.sign({id}, process.env.JWT_SECRET, {
         expiresIn: maxAge * 3
     });
 }
@@ -60,6 +60,11 @@ module.exports.login_post = async (req, res)=>{
 
 }
 
+module.exports.logout = (req, res)=>{
+    res.cookie('jwt', '', {maxAge: 1});
+    res.status(200).json({message: "Logout successful"});
+}
+
 module.exports.list_users = async (req, res)=>{
     const users = await User.find({});
     res.status(200).json(users);
@@ -82,7 +87,7 @@ module.exports.get_current_user = async (req, res)=>{
         res.status(400).json({errors:"No token found"});
         return;
     }
-    jwt.verify(token, "nodeondocker", async (err, decoded_data)=>{
+    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded_data)=>{
         if (err){
             res.status(400).json({errors:err.message});
             return;
