@@ -55,7 +55,6 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-
 userSchema.pre('save', async function (next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
@@ -67,6 +66,8 @@ userSchema.statics.login_user = async function (email, password){
     if (user){
         const is_correct = await bcrypt.compare(password, user.password);
         if (is_correct){
+            user.last_time_login = Date.now();
+            await user.save();
             return user;
         }
         throw Error("Incorrect password")

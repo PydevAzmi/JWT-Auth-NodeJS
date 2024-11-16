@@ -2,10 +2,10 @@
 const User = require("../model/User");
 const jwt = require('jsonwebtoken')
 
-const maxAge = 24 * 60 * 60
+const maxAge = 60 * 60 * 24;
 const createToken = (id) =>{
     return jwt.sign({id}, "nodeondocker", {
-        expiresIn: maxAge * 3 * 1000
+        expiresIn: maxAge * 3
     });
 }
 
@@ -45,7 +45,7 @@ module.exports.login_post = async (req, res)=>{
         res.status(400).json({errors:{'Password':"Password is required"}});
         return;
     }
-    
+
     try{
         const user = await User.login_user(email, password);
         token = createToken(user._id);
@@ -68,6 +68,10 @@ module.exports.list_users = async (req, res)=>{
 module.exports.del_user = async (req, res)=>{
     const id = req.params.id;
     const user = await User.findByIdAndDelete(id);
+    if (!user){
+        res.status(400).json({errors:"User not found"});
+        return;
+    }
     res.status(200).json(user);
 }
 
@@ -78,7 +82,13 @@ module.exports.get_current_user = async (req, res)=>{
         res.status(400).json({errors:"No token found"});
         return;
     }
-    const decoded_data = jwt.decode(token);
-    const user = await User.findById(decoded_data.id);
-    res.status(200).json(user);
+    jwt.verify(token, "nodeondocker", async (err, decoded_data)=>{
+        if (err){
+            res.status(400).json({errors:err.message});
+            return;
+        }
+        const user = await User.findById(decoded_data.id);
+        res.status(200).json(user);
+        return;
+    });
 }

@@ -4,6 +4,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 require('./src/config/dbConnect').connect();
 const authRoutes = require('./src/routes/auth');
+const { require_auth } = require('./src/middlewares/authentication');
 
 dotenv.config();
 const app = express();
@@ -19,16 +20,9 @@ app.set('view engine', 'ejs');
 
 // routes
 app.use(authRoutes);
-
-app.get('/set-cookie', (req, res) => {
-    res.cookie('name', 'pydevazmi', { maxAge: 5000, httpOnly: false });
-    res.send('Cookie has been set');
-});
-
-app.get('/get-cookie', (req, res) => {
-    const cookie = req.cookies.name;
-    res.send(`Cookie value: ${cookie}`);
-});
+app.get('/', require_auth ,(req, res)=>{
+    res.status(200).json({message: "Welcome to the API"});
+})
 
 // Server
 const server = http.createServer(app);
