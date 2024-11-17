@@ -67,3 +67,11 @@ This is a Node.js application that manages user authentication using JWT (JSON W
 ## API Documentation
    this is the API documentation for the JWT-Auth-NodeJS application published on Postman:
    https://documenter.getpostman.com/view/23311056/2sAYBPmZku
+
+
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for enhancements or bug fixes.
+
+
+## License
+This project is licensed under the MIT License.
