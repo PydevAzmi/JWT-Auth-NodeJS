@@ -2,8 +2,8 @@
 FROM node:alpine
 WORKDIR /src
 RUN apk --no-cache add \
-		bash \
-		ca-certificates
+	bash \
+	ca-certificates
 
 # Install dependencies
 COPY package*.json /src
